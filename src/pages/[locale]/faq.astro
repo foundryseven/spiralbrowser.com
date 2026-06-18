@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, locales, defaultLocale, type Locale } from '../../i18n';
+
+export async function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const faqs = [
+  { q: t(locale, 'faq.q1.q'), a: t(locale, 'faq.q1.a')
+      .replace('{fastrender}', 'https://github.com/nicebyte/fastrender')
+      .replace('{methodology}', '/how')
+      .replace('{failures}', '/failures'),
+  },
+  { q: t(locale, 'faq.q2.q'), a: t(locale, 'faq.q2.a').replace('{ladybird}', 'https://ladybird.org/posts/adopting-rust/') },
+  { q: t(locale, 'faq.q3.q'), a: t(locale, 'faq.q3.a').replace('{repo}', 'https://github.com/foundryseven/spiral-browser') },
+  { q: t(locale, 'faq.q4.q'), a: t(locale, 'faq.q4.a').replace('{failures}', '/failures') },
+  { q: t(locale, 'faq.q5.q'), a: t(locale, 'faq.q5.a') },
+];
+---
+
+<Base title={t(locale, 'faq.title')} locale={locale}>
+  <section class="container-wide py-16 md:py-24">
+    <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">{t(locale, 'faq.title')}</h1>
+    <p class="mt-4 max-w-2xl text-lg text-muted-foreground">{t(locale, 'faq.intro')}</p>
+  </section>
+
+  <section class="border-t border-border/40">
+    <div class="container-prose py-16">
+      <dl class="space-y-10">
+        {faqs.map((f) => (
+          <div>
+            <dt class="text-lg font-semibold tracking-tight">{f.q}</dt>
+            <dd class="mt-2 text-muted-foreground">{f.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+</Base>

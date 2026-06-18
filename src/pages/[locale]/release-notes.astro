@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, locales, defaultLocale, type Locale } from '../../i18n';
+
+export async function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+---
+
+<Base title={t(locale, 'release-notes.title')} locale={locale}>
+  <section class="container-wide py-16 md:py-24">
+    <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">{t(locale, 'release-notes.title')}</h1>
+    <p class="mt-4 max-w-2xl text-lg text-muted-foreground">{t(locale, 'release-notes.intro')}</p>
+  </section>
+
+  <section class="border-t border-border/40">
+    <div class="container-wide py-16">
+      <div class="rounded-lg border border-dashed border-border bg-muted/20 p-8 text-center">
+        <p class="text-lg font-medium">{t(locale, 'release-notes.empty')}</p>
+      </div>
+
+      <div class="mt-12 max-w-2xl">
+        <h2 class="text-xl font-semibold tracking-tight">{t(locale, 'release-notes.schema.title')}</h2>
+        <p class="mt-2 text-muted-foreground">{t(locale, 'release-notes.schema.body')}</p>
+        <pre class="mt-4 overflow-x-auto rounded-lg border border-border bg-muted/30 p-4 text-sm"><code>{`---
+version: "0.1.0"
+date: 2026-12-01
+download_url: "https://spiralbrowser.com/releases/spiral-0.1.0/"
+checksums:
+  - platform: macos
+    sha256: "..."
+  - platform: windows
+    sha256: "..."
+  - platform: linux
+    sha256: "..."
+---
+
+# Spiral 0.1.0
+
+First public release. See the [methodology](/how) and the [failure log](/failures).
+`}</code></pre>
+      </div>
+    </div>
+  </section>
+</Base>

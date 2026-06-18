@@ -1,0 +1,63 @@
+---
+import { t, locales, defaultLocale, type Locale } from '../i18n';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const path = Astro.url.pathname;
+
+function localisedPath(target: Locale): string {
+  // All locales are prefixed in the URL (prefixDefaultLocale: true).
+  // Strip the current locale prefix, then add the target.
+  const stripped = path.replace(/^\/(en|de|fr|ja)(?=\/|$)/, '') || '/';
+  if (target === defaultLocale) {
+    return stripped;
+  }
+  return `/${target}${stripped === '/' ? '' : stripped}`;
+}
+---
+
+<header class="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  <div class="container-wide flex h-14 items-center justify-between gap-4">
+    <div class="flex items-center gap-6">
+      <a href={localisedPath(defaultLocale)} class="flex items-center gap-2 font-semibold tracking-tight">
+        <span class="inline-block h-2 w-2 rounded-full bg-foreground" aria-hidden="true"></span>
+        <span>{t(locale, 'site.name')}</span>
+      </a>
+      <nav class="hidden items-center gap-5 text-sm text-muted-foreground md:flex" aria-label="Primary">
+        <a href={localisedPath(locale).replace(/\/$/, '') || '/'} class="hover:text-foreground">{t(locale, 'nav.home')}</a>
+        <a href={`${localisedPath(locale).replace(/\/$/, '')}/download`} class="hover:text-foreground">{t(locale, 'nav.download')}</a>
+        <a href={`${localisedPath(locale).replace(/\/$/, '')}/release-notes`} class="hover:text-foreground">{t(locale, 'nav.release-notes')}</a>
+        <a href={`${localisedPath(locale).replace(/\/$/, '')}/how`} class="hover:text-foreground">{t(locale, 'nav.how')}</a>
+        <a href={`${localisedPath(locale).replace(/\/$/, '')}/colophon`} class="hover:text-foreground">{t(locale, 'nav.colophon')}</a>
+        <a href={`${localisedPath(locale).replace(/\/$/, '')}/faq`} class="hover:text-foreground">{t(locale, 'nav.faq')}</a>
+        <a href={`${localisedPath(locale).replace(/\/$/, '')}/failures`} class="hover:text-foreground">{t(locale, 'nav.failures')}</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-3">
+      <select
+        class="hidden rounded-md border border-border bg-background px-2 py-1 text-xs text-muted-foreground md:block"
+        aria-label="Language"
+        onchange="if(this.value){window.location.href=this.value}"
+      >
+        {locales.map((l) => (
+          <option value={localisedPath(l)} selected={l === locale}>
+            {l.toUpperCase()}
+          </option>
+        ))}
+      </select>
+      <ThemeToggle />
+      <a
+        href="https://github.com/foundryseven/spiral-browser"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="hidden text-sm text-muted-foreground hover:text-foreground md:inline"
+      >
+        {t(locale, 'nav.source')}
+      </a>
+    </div>
+  </div>
+</header>

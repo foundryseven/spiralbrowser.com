@@ -1,0 +1,59 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, locales, defaultLocale, type Locale } from '../../i18n';
+
+export async function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const sections = [
+  { title: t(locale, 'how.position.title'), body: t(locale, 'how.position.body') },
+  { title: t(locale, 'how.model.title'), body: t(locale, 'how.model.body') },
+  { title: t(locale, 'how.human-decides.title'), body: t(locale, 'how.human-decides.body') },
+  { title: t(locale, 'how.ai-does.title'), body: t(locale, 'how.ai-does.body') },
+  { title: t(locale, 'how.review.title'), body: t(locale, 'how.review.body') },
+  { title: t(locale, 'how.tests.title'), body: t(locale, 'how.tests.body') },
+  { title: t(locale, 'how.failures.title'), body: t(locale, 'how.failures.body') },
+];
+
+const priorArt = t(locale, 'how.what-it-isnt.body')
+  .replace('{ladybird}', 'https://ladybird.org/posts/adopting-rust/')
+  .replace('{fastrender}', 'https://github.com/nicebyte/fastrender');
+---
+
+<Base title={t(locale, 'how.title')} locale={locale}>
+  <section class="container-wide py-16 md:py-24">
+    <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">{t(locale, 'how.title')}</h1>
+    <p class="mt-4 max-w-2xl text-lg text-muted-foreground">{t(locale, 'how.intro')}</p>
+  </section>
+
+  <section class="border-t border-border/40">
+    <div class="container-prose py-16">
+      <div class="space-y-12">
+        {sections.map((s) => (
+          <div>
+            <h2 class="text-2xl font-semibold tracking-tight">{s.title}</h2>
+            <p class="mt-3 text-muted-foreground">{s.body}</p>
+          </div>
+        ))}
+
+        <div class="rounded-lg border border-border bg-muted/30 p-6">
+          <h2 class="text-2xl font-semibold tracking-tight">{t(locale, 'how.what-it-isnt.title')}</h2>
+          <p class="mt-3 text-muted-foreground">{priorArt}</p>
+        </div>
+
+        <div class="rounded-lg border border-border bg-muted/30 p-6">
+          <h2 class="text-2xl font-semibold tracking-tight">{t(locale, 'how.colophon-link.title')}</h2>
+          <p class="mt-3 text-muted-foreground">
+            {t(locale, 'how.colophon-link.body').replace('{colophon}', '/colophon')}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,88 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, locales, defaultLocale, type Locale } from '../../i18n';
+
+export async function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+---
+
+<Base locale={locale}>
+  <section class="container-wide py-20 md:py-32">
+    <p class="text-sm font-medium uppercase tracking-widest text-muted-foreground">{t(locale, 'home.hero.eyebrow')}</p>
+    <h1 class="mt-4 max-w-3xl text-4xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
+      {t(locale, 'home.hero.title')}
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
+      {t(locale, 'home.hero.subtitle')}
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a
+        href="/how"
+        class="inline-flex h-10 items-center justify-center rounded-md bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+      >
+        {t(locale, 'home.hero.cta.primary')}
+      </a>
+      <a
+        href="https://github.com/foundryseven/spiral-browser"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="inline-flex h-10 items-center justify-center rounded-md border border-border bg-background px-5 text-sm font-medium transition-colors hover:bg-accent"
+      >
+        {t(locale, 'home.hero.cta.secondary')}
+      </a>
+    </div>
+  </section>
+
+  <section class="border-t border-border/40">
+    <div class="container-wide grid gap-12 py-16 md:grid-cols-2 md:py-24">
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight md:text-3xl">{t(locale, 'home.what-is.title')}</h2>
+        <p class="mt-4 text-muted-foreground">{t(locale, 'home.what-is.body')}</p>
+      </div>
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight md:text-3xl">{t(locale, 'home.who.title')}</h2>
+        <p class="mt-4 text-muted-foreground">{t(locale, 'home.who.body')}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-border/40 bg-muted/30">
+    <div class="container-wide grid gap-12 py-16 md:grid-cols-2 md:py-24">
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight md:text-3xl">{t(locale, 'home.manifesto.title')}</h2>
+        <p class="mt-4 text-muted-foreground">{t(locale, 'home.manifesto.body')}</p>
+      </div>
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight md:text-3xl">{t(locale, 'home.roadmap.title')}</h2>
+        <p class="mt-4 text-muted-foreground">{t(locale, 'home.roadmap.body')}</p>
+        <a
+          href="https://github.com/foundryseven/spiral-browser/blob/main/ROADMAP.md"
+          rel="noopener noreferrer"
+          target="_blank"
+          class="mt-4 inline-flex text-sm font-medium underline underline-offset-4 hover:text-foreground"
+        >
+          Read the roadmap →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-border/40">
+    <div class="container-wide py-16 md:py-24">
+      <h2 class="max-w-2xl text-2xl font-semibold tracking-tight md:text-3xl">{t(locale, 'home.cta.title')}</h2>
+      <p class="mt-4 max-w-2xl text-muted-foreground">{t(locale, 'home.cta.body')}</p>
+      <a
+        href="/how"
+        class="mt-6 inline-flex h-10 items-center justify-center rounded-md border border-border bg-background px-5 text-sm font-medium transition-colors hover:bg-accent"
+      >
+        {t(locale, 'home.cta.button')} →
+      </a>
+    </div>
+  </section>
+</Base>

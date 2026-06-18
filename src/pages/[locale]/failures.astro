@@ -1,0 +1,63 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, locales, defaultLocale, type Locale } from '../../i18n';
+
+export async function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const failures: Array<{ id: string; date: string; title: string; category: string; summary: string; lesson: string; commit_introduced: string; commit_fixed: string }> = [
+  {
+    id: '2026-06-18-001-render-node-id',
+    date: '2026-06-18',
+    title: 'spiral-core::RenderNodeId — over-published type, no consumer',
+    category: 'Wiring leaks',
+    summary:
+      'A `pub` struct RenderNodeId(u32) and a `pub` enum DomOp were declared in spiral-core during the M4.4 sprint with the intent of cross-crate use, but no call site outside spiral-core existed when the sprint ended.',
+    commit_introduced: 'b49fafe',
+    commit_fixed: '19dcf9e',
+    lesson:
+      'A `pub` symbol is not done when it compiles. It is done when at least one consumer outside the symbol\'s home crate imports it. The audit-orphan-exports script is the standing guard against this category of failure; the human reviewer is the secondary defence.',
+  },
+];
+---
+
+<Base title={t(locale, 'failures.title')} locale={locale}>
+  <section class="container-wide py-16 md:py-24">
+    <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">{t(locale, 'failures.title')}</h1>
+    <p class="mt-4 max-w-2xl text-lg text-muted-foreground">{t(locale, 'failures.intro')}</p>
+  </section>
+
+  <section class="border-t border-border/40">
+    <div class="container-prose py-16">
+      {failures.length === 0 ? (
+        <div class="rounded-lg border border-dashed border-border bg-muted/20 p-8 text-center">
+          <p class="text-lg font-medium">{t(locale, 'failures.empty')}</p>
+        </div>
+      ) : (
+        <ul class="space-y-8">
+          {failures.map((f) => (
+            <li class="rounded-lg border border-border bg-card p-6 text-card-foreground">
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 class="text-xl font-semibold tracking-tight">{f.title}</h2>
+                <span class="text-xs uppercase tracking-wider text-muted-foreground">{f.category}</span>
+              </div>
+              <p class="mt-1 text-sm text-muted-foreground">
+                <time datetime={f.date}>{f.date}</time> · introduced <code class="rounded bg-muted px-1 py-0.5 text-xs">{f.commit_introduced}</code> · fixed <code class="rounded bg-muted px-1 py-0.5 text-xs">{f.commit_fixed}</code>
+              </p>
+              <p class="mt-4 text-muted-foreground">{f.summary}</p>
+              <p class="mt-3 text-sm">
+                <span class="font-semibold">Lesson:</span> {f.lesson}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</Base>

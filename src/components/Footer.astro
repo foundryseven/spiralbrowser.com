@@ -1,0 +1,21 @@
+---
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const year = new Date().getFullYear();
+const builtWith = t(locale, 'footer.built-with')
+  .replace('{methodology}', 'https://spiralbrowser.com/how');
+---
+
+<footer class="border-t border-border/40 bg-background">
+  <div class="container-wide flex flex-col gap-3 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+    <p>
+      © {year} Spiral Browser. License: {t(locale, 'footer.license')}.
+    </p>
+    <p class="prose prose-sm max-w-none" set:html={builtWith}></p>
+  </div>
+</footer>

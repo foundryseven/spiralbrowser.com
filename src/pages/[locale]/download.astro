@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, locales, defaultLocale, type Locale } from '../../i18n';
+
+export async function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const platforms = [
+  { key: 'macos', label: t(locale, 'download.platforms.macos'), status: t(locale, 'download.platforms.macos.status') },
+  { key: 'windows', label: t(locale, 'download.platforms.windows'), status: t(locale, 'download.platforms.windows.status') },
+  { key: 'linux', label: t(locale, 'download.platforms.linux'), status: t(locale, 'download.platforms.linux.status') },
+];
+---
+
+<Base title={t(locale, 'download.title')} locale={locale}>
+  <section class="container-wide py-16 md:py-24">
+    <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">{t(locale, 'download.title')}</h1>
+    <p class="mt-4 max-w-2xl text-lg text-muted-foreground">{t(locale, 'download.intro')}</p>
+  </section>
+
+  <section class="border-t border-border/40">
+    <div class="container-wide py-16">
+      <h2 class="text-2xl font-semibold tracking-tight md:text-3xl">{t(locale, 'download.platforms.title')}</h2>
+      <p class="mt-2 max-w-2xl text-muted-foreground">{t(locale, 'download.platforms.intro')}</p>
+      <div class="mt-8 overflow-hidden rounded-lg border border-border">
+        <table class="w-full text-left text-sm">
+          <thead class="border-b border-border bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
+            <tr>
+              <th class="px-4 py-3 font-medium">Platform</th>
+              <th class="px-4 py-3 font-medium">Status</th>
+              <th class="px-4 py-3 font-medium">Binary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {platforms.map((p) => (
+              <tr class="border-b border-border/40 last:border-0">
+                <td class="px-4 py-3 font-medium">{p.label}</td>
+                <td class="px-4 py-3 text-muted-foreground">{p.status}</td>
+                <td class="px-4 py-3 text-muted-foreground">—</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-border/40 bg-muted/30">
+    <div class="container-wide grid gap-12 py-16 md:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight md:text-3xl">{t(locale, 'download.source.title')}</h2>
+        <p class="mt-4 text-muted-foreground">{t(locale, 'download.source.body')}</p>
+        <a
+          href="https://github.com/foundryseven/spiral-browser"
+          rel="noopener noreferrer"
+          target="_blank"
+          class="mt-4 inline-flex h-10 items-center justify-center rounded-md bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+        >
+          {t(locale, 'download.source.button')} →
+        </a>
+      </div>
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight md:text-3xl">{t(locale, 'download.watching.title')}</h2>
+        <p class="mt-4 text-muted-foreground">{t(locale, 'download.watching.body')}</p>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { t, getLocaleFromUrl, type Locale } from '../i18n';
+
+const locale: Locale = getLocaleFromUrl(Astro.url);
+---
+
+<Base title={t(locale, '404.title')} noindex>
+  <section class="container-wide flex flex-col items-center justify-center py-32 text-center">
+    <p class="text-sm font-medium uppercase tracking-widest text-muted-foreground">404</p>
+    <h1 class="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">{t(locale, '404.title')}</h1>
+    <p class="mt-4 max-w-md text-muted-foreground">{t(locale, '404.body')}</p>
+    <a
+      href="/"
+      class="mt-8 inline-flex h-10 items-center justify-center rounded-md bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+    >
+      {t(locale, '404.button')} →
+    </a>
+  </section>
+</Base>
